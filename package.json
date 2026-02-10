@@ -1,0 +1,7 @@
+{
+  "name": "framework-espidf",
+  "version": "5.5.2",
+  "description": "Espressif IoT Development Framework (ESP-IDF)",
+  "keywords": ["framework", "espidf", "espressif", "esp32"],
+  "license": "Apache-2.0"
+}
