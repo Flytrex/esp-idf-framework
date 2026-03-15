@@ -3,6 +3,7 @@
  *
  * SPDX-License-Identifier: Apache-2.0
  */
+#define IGNORE_ESP_I2C_WARNINGS 1
 
 #include "esp_rom_gpio.h"
 #include "esp_memory_utils.h"
@@ -337,7 +338,9 @@ esp_err_t rmt_new_tx_channel(const rmt_tx_channel_config_t *config, rmt_channel_
     uint64_t old_gpio_rsv_mask = esp_gpio_reserve(BIT64(config->gpio_num));
     // check if the GPIO is already used by others, RMT TX channel only uses the output path of the GPIO
     if (old_gpio_rsv_mask & BIT64(config->gpio_num)) {
+#if !IGNORE_ESP_I2C_WARNINGS
         ESP_LOGW(TAG, "GPIO %d is not usable, maybe conflict with others", config->gpio_num);
+#endif /* !IGNORE_ESP_I2C_WARNINGS */
     }
     // GPIO Matrix/MUX configuration
     gpio_func_sel(config->gpio_num, PIN_FUNC_GPIO);
@@ -1155,7 +1158,9 @@ esp_err_t rmt_tx_switch_gpio(rmt_channel_handle_t channel, gpio_num_t gpio_num, 
         // Reserve the new GPIO
         uint64_t old_gpio_rsv_mask = esp_gpio_reserve(BIT64(gpio_num));
         if (old_gpio_rsv_mask & BIT64(gpio_num)) {
+#if !IGNORE_ESP_I2C_WARNINGS
             ESP_LOGW(TAG, "GPIO %d is not usable, maybe conflict with others", gpio_num);
+#endif /* !IGNORE_ESP_I2C_WARNINGS */
         }
 
         // Configure the new GPIO

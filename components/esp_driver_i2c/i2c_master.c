@@ -3,6 +3,7 @@
  *
  * SPDX-License-Identifier: Apache-2.0
  */
+#define IGNORE_ESP_I2C_ERRORS 1
 
 #include <string.h>
 #include <sys/param.h>
@@ -552,7 +553,9 @@ static void s_i2c_send_commands(i2c_master_bus_handle_t i2c_master, TickType_t t
             s_i2c_hw_fsm_reset(i2c_master, true);
             i2c_master->cmd_idx = 0;
             i2c_master->trans_idx = 0;
+#if !IGNORE_ESP_I2C_ERRORS
             ESP_LOGE(TAG, "I2C hardware timeout detected");
+#endif /* IGNORE_ESP_I2C_ERRORS */
             xSemaphoreGive(i2c_master->cmd_semphr);
             return;
         }

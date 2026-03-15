@@ -3,6 +3,7 @@
  *
  * SPDX-License-Identifier: Apache-2.0
  */
+#define IGNORE_ESP_I2C_WARNINGS 1
 #include <sys/lock.h>
 #include <string.h>
 #include <stdio.h>
@@ -324,11 +325,15 @@ static esp_err_t s_hp_i2c_pins_config(i2c_bus_handle_t handle)
     uint64_t old_gpio_rsv_mask = esp_gpio_reserve(BIT64(handle->sda_num) | BIT64(handle->scl_num));
     // check if the GPIO is already used by others
     if (old_gpio_rsv_mask & BIT64(handle->sda_num)) {
+#if !IGNORE_ESP_I2C_WARNINGS
         ESP_LOGW(TAG, "GPIO %d is not usable, maybe conflict with others", handle->sda_num);
+#endif /* !IGNORE_ESP_I2C_WARNINGS */
     }
     // check if the GPIO is already used by others
     if (old_gpio_rsv_mask & BIT64(handle->scl_num)) {
+#if !IGNORE_ESP_I2C_WARNINGS
         ESP_LOGW(TAG, "GPIO %d is not usable, maybe conflict with others", handle->scl_num);
+#endif /* !IGNORE_ESP_I2C_WARNINGS */
     }
 
     // SDA pin configurations
@@ -373,11 +378,15 @@ static esp_err_t s_lp_i2c_pins_config(i2c_bus_handle_t handle)
     uint64_t old_gpio_rsv_mask = esp_gpio_reserve(BIT64(handle->sda_num) | BIT64(handle->scl_num));
     // check if the GPIO is already used by others
     if (old_gpio_rsv_mask & BIT64(handle->sda_num)) {
+#if !IGNORE_ESP_I2C_WARNINGS
         ESP_LOGW(TAG, "GPIO %d is not usable, maybe conflict with others", handle->sda_num);
+#endif /* !IGNORE_ESP_I2C_WARNINGS */
     }
     // check if the GPIO is already used by others
     if (old_gpio_rsv_mask & BIT64(handle->scl_num)) {
+#if !IGNORE_ESP_I2C_WARNINGS
         ESP_LOGW(TAG, "GPIO %d is not usable, maybe conflict with others", handle->scl_num);
+#endif /* !IGNORE_ESP_I2C_WARNINGS */
     }
 
 #if !SOC_LP_GPIO_MATRIX_SUPPORTED
